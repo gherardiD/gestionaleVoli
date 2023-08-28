@@ -2,7 +2,7 @@ package gestionale;
 
 import java.util.GregorianCalendar;
 
-public class Volo {
+public class Volo implements java.io.Serializable{
   private static int next_code = 0;
   private String codice;
   private String partenza;
@@ -26,7 +26,7 @@ public class Volo {
 
   // Setters
   private void setCodice() {
-    this.codice = partenza.charAt(0) + destinazione.charAt(0) + String.valueOf(next_code);
+    this.codice = String.valueOf(partenza.charAt(0))  + String.valueOf(destinazione.charAt(0)) + String.valueOf(next_code);
     next_code++;
   }
 

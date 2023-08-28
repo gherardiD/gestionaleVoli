@@ -1,5 +1,7 @@
 package gestionale;
 
+import java.io.*;
+
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -15,7 +17,64 @@ public class Compagnia {
     prenotazioni = new LinkedList<Prenotazione>();
   }
 
-  //clients methods222
+  public void save() {
+    try{
+      //create an output stream to save the object to a file
+      FileOutputStream fileOut = new FileOutputStream("C:\\\\Users\\\\danig\\\\OneDrive\\\\Desktop\\\\5IA\\\\compitiVacanze\\\\informatica\\\\gestionaleVoli\\\\gestionalevoli\\\\src\\\\main\\\\java\\\\gestionale\\data.ser");
+      ObjectOutputStream out = new ObjectOutputStream(fileOut);
+      //Serialize and save the object
+      out.writeObject(voli);
+      out.writeObject(clienti);
+      out.writeObject(prenotazioni);
+      //close the streams
+      out.close();
+      fileOut.close();
+    }catch(IOException i){
+      i.printStackTrace();
+    }
+  }
+
+  public void load() {
+    
+    try{
+      //create an input stream to load the object from a file
+      FileInputStream fileIn = new FileInputStream("C:\\Users\\danig\\OneDrive\\Desktop\\5IA\\compitiVacanze\\informatica\\gestionaleVoli\\gestionalevoli\\src\\main\\java\\gestionale\\data.ser");
+      ObjectInputStream in = new ObjectInputStream(fileIn);
+
+      //load the object from the file
+      voli = (HashMap<String, Volo>) in.readObject();
+      clienti = (HashMap<String, Cliente>) in.readObject();
+      prenotazioni = (LinkedList<Prenotazione>) in.readObject();
+
+      //close the streams
+      in.close();
+      fileIn.close();
+    }catch(IOException i){
+      i.printStackTrace();
+      return;
+    }catch(ClassNotFoundException c){
+      System.out.println("Class not found");
+      c.printStackTrace();
+      return;
+    }
+  }
+
+  public void deleteFile() {
+    File file = new File("C:\\\\Users\\\\danig\\\\OneDrive\\\\Desktop\\\\5IA\\\\compitiVacanze\\\\informatica\\\\gestionaleVoli\\\\gestionalevoli\\\\src\\\\main\\\\java\\\\gestionale\\\\data.ser");
+    // Check if the file exists
+    if (file.exists()) {
+      // Delete the file
+      if (file.delete()) {
+          System.out.println("File deleted successfully.");
+      } else {
+          System.out.println("Failed to delete the file.");
+      }
+    } else {
+        System.out.println("File does not exist.");
+    }
+  }
+
+  //clients methods
   public String registrazione(String nome, String cognome, String nazione, String citta_nascita, GregorianCalendar data_nascita) {
     Cliente new_cliente = new Cliente(nome, cognome, nazione, citta_nascita, data_nascita);
     String codice = new_cliente.getCodice();
@@ -114,7 +173,7 @@ public class Compagnia {
     return null;
   }
 
-  public void eliminaPrenotazione(String codice_volo, String codice_cliente){
+  public void eliminaPrenotazione(String codice_cliente , String codice_volo){
     Prenotazione prenotazione = getPrenotazione(codice_volo, codice_cliente);
     if (prenotazione == null) {
       System.out.println("Prenotazione non trovata");
@@ -123,7 +182,7 @@ public class Compagnia {
     prenotazioni.remove(prenotazione);
   }
 
-  public Prenotazione modificaPrenotazioneDati(String codice_volo, String codice_cliente, int numero_bagagli, int peso_bagaglio){
+  public Prenotazione setPrenotazioneDati(String codice_cliente, String codice_volo, int numero_bagagli, int peso_bagaglio){
     Prenotazione prenotazione = getPrenotazione(codice_volo, codice_cliente);
     if (prenotazione == null) {
       System.out.println("Prenotazione non trovata");
@@ -135,6 +194,18 @@ public class Compagnia {
     return prenotazione;
   }
 
+  public void eliminaPrenotazione(String codice) {
+    for (Prenotazione prenotazione : prenotazioni) {
+      if (prenotazione.getCodice().equals(codice)) {
+        prenotazioni.remove(prenotazione);
+        System.out.println("Prenotazione eliminata");
+        System.out.println(prenotazioni.size());
+        return;
+      }
+    }
+    System.out.println("Prenotazione non trovata");
+  }
+
   public LinkedList<Prenotazione> getPrenotazioniCliente(String codice_cliente) {
     LinkedList<Prenotazione> prenotazioni_cliente = new LinkedList<Prenotazione>();
     for (Prenotazione prenotazione : prenotazioni) {
@@ -142,7 +213,7 @@ public class Compagnia {
         prenotazioni_cliente.add(prenotazione);
       }
     }
-    System.out.println("Prenotazioni trovate: " + prenotazioni_cliente.size());
+    System.out.println("Prenotazioni del cliente " + codice_cliente + " trovate: " + prenotazioni_cliente.size());
     return prenotazioni_cliente;
   }
 
@@ -153,7 +224,24 @@ public class Compagnia {
         prenotazioni_volo.add(prenotazione);
       }
     }
-    System.out.println("Prenotazioni trovate: " + prenotazioni_volo.size());
+    System.out.println("Prenotazioni del volo " + codice_volo + " trovate: " + prenotazioni_volo.size());
     return prenotazioni_volo;
+  }
+
+  public void print() {
+    System.out.println("clienti:");
+    for (Cliente cliente : clienti.values()) {
+      System.out.println(cliente);
+    }
+
+    System.out.println("voli:");
+    for (Volo volo : voli.values()) {
+      System.out.println(volo);
+    }
+
+    System.out.println("prenotazioni:");
+    for (Prenotazione prenotazione : prenotazioni) {
+      System.out.println(prenotazione);
+    }
   }
 }

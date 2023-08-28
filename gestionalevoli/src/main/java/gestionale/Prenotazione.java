@@ -2,7 +2,7 @@ package gestionale;
 
 //import java.util.HashMap;
 
-public class Prenotazione {
+public class Prenotazione implements java.io.Serializable{
   private static int next_code = 0;
   private String codice;
   //private HashMap<Cliente, Volo> prenotazioni;

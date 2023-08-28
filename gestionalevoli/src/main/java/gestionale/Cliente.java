@@ -2,7 +2,7 @@ package gestionale;
 
 import java.util.GregorianCalendar;
 
-public class Cliente {
+public class Cliente implements java.io.Serializable{
   private static int next_code = 0;
   private String nome;
   private String cognome;

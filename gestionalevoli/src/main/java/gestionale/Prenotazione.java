@@ -19,6 +19,7 @@ public class Prenotazione implements java.io.Serializable{
     this.peso_bagaglio = peso_bagaglio;
     codice=String.valueOf(next_code);
   }
+  
 
   // Setters
   public void setNumeroBagagli(int numero_bagagli) {

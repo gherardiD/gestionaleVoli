@@ -24,6 +24,38 @@ public class Volo implements java.io.Serializable{
     setCodice();
   }
 
+  public boolean occupaPosto() {
+    posti_disponibili--;
+    if (posti_disponibili < 0) {
+      System.out.println("Posti esauriti");
+      return false;
+    }
+    return true;
+  }
+
+  public void liberaPosto() {
+    posti_disponibili++;
+    System.out.println("1 posto liberato");
+  }
+
+  public void durataVolo() {
+    int ora_partenza = Integer.parseInt(this.ora_partenza.substring(0, 2));
+    int minuti_partenza = Integer.parseInt(this.ora_partenza.substring(3, 5));
+    int ora_arrivo = Integer.parseInt(this.ora_arrivo.substring(0, 2));
+    int minuti_arrivo = Integer.parseInt(this.ora_arrivo.substring(3, 5));
+    int durata_ore = ora_arrivo - ora_partenza;
+    if (durata_ore < 0) {
+      durata_ore += 24;
+    }
+    int durata_minuti = minuti_arrivo - minuti_partenza;
+    if (durata_minuti < 0) {
+      durata_ore--;
+      durata_minuti += 60;
+    }
+    System.out.println("Durata volo: " + durata_ore + ":" + durata_minuti);
+  }
+  
+
   // Setters
   private void setCodice() {
     this.codice = String.valueOf(partenza.charAt(0))  + String.valueOf(destinazione.charAt(0)) + String.valueOf(next_code);
@@ -89,23 +121,6 @@ public class Volo implements java.io.Serializable{
 
   public int getCosto() {
     return costo;
-  }
-
-  public void durataVolo() {
-    int ora_partenza = Integer.parseInt(this.ora_partenza.substring(0, 2));
-    int minuti_partenza = Integer.parseInt(this.ora_partenza.substring(3, 5));
-    int ora_arrivo = Integer.parseInt(this.ora_arrivo.substring(0, 2));
-    int minuti_arrivo = Integer.parseInt(this.ora_arrivo.substring(3, 5));
-    int durata_ore = ora_arrivo - ora_partenza;
-    if (durata_ore < 0) {
-      durata_ore += 24;
-    }
-    int durata_minuti = minuti_arrivo - minuti_partenza;
-    if (durata_minuti < 0) {
-      durata_ore--;
-      durata_minuti += 60;
-    }
-    System.out.println("Durata volo: " + durata_ore + ":" + durata_minuti);
   }
 
 }

@@ -158,10 +158,17 @@ public class Compagnia {
       System.out.println("Cliente non trovato");
       return null;
     }
+
     Volo volo = voli.get(codice_volo);
-    Prenotazione prenotazione = new Prenotazione(cliente, volo, numero_bagagli, peso_bagaglio);
-    prenotazioni.add(prenotazione);
-    return prenotazione.getCodice();
+    if (volo.occupaPosto()) {
+      System.out.println("Prenotazione effettuata");
+      Prenotazione prenotazione = new Prenotazione(cliente, volo, numero_bagagli, peso_bagaglio);
+      prenotazioni.add(prenotazione);
+      return prenotazione.getCodice();
+    } else {
+      System.out.println("Prenotazione non effettuata");
+      return null;
+    }
   }
 
   private Prenotazione getPrenotazione(String codice_volo, String codice_cliente) {
@@ -175,23 +182,13 @@ public class Compagnia {
 
   public void eliminaPrenotazione(String codice_cliente , String codice_volo){
     Prenotazione prenotazione = getPrenotazione(codice_volo, codice_cliente);
+    Volo volo = voli.get(codice_volo);
     if (prenotazione == null) {
       System.out.println("Prenotazione non trovata");
       return;
     }
+    volo.liberaPosto();
     prenotazioni.remove(prenotazione);
-  }
-
-  public Prenotazione setPrenotazioneDati(String codice_cliente, String codice_volo, int numero_bagagli, int peso_bagaglio){
-    Prenotazione prenotazione = getPrenotazione(codice_volo, codice_cliente);
-    if (prenotazione == null) {
-      System.out.println("Prenotazione non trovata");
-      return null;
-    }
-    prenotazione.setNumeroBagagli(numero_bagagli);
-    prenotazione.setPesoBagaglio(peso_bagaglio);
-    System.out.println("Prenotazione modificata");
-    return prenotazione;
   }
 
   public void eliminaPrenotazione(String codice) {
@@ -204,6 +201,18 @@ public class Compagnia {
       }
     }
     System.out.println("Prenotazione non trovata");
+  }
+
+  public Prenotazione setPrenotazioneDati(String codice_cliente, String codice_volo, int numero_bagagli, int peso_bagaglio){
+    Prenotazione prenotazione = getPrenotazione(codice_volo, codice_cliente);
+    if (prenotazione == null) {
+      System.out.println("Prenotazione non trovata");
+      return null;
+    }
+    prenotazione.setNumeroBagagli(numero_bagagli);
+    prenotazione.setPesoBagaglio(peso_bagaglio);
+    System.out.println("Prenotazione modificata");
+    return prenotazione;
   }
 
   public LinkedList<Prenotazione> getPrenotazioniCliente(String codice_cliente) {
@@ -243,5 +252,30 @@ public class Compagnia {
     for (Prenotazione prenotazione : prenotazioni) {
       System.out.println(prenotazione);
     }
+  }
+
+  //getters
+  public HashMap<String, Volo> getVoli() {
+    return voli;
+  }
+
+  public HashMap<String, Cliente> getClienti() {
+    return clienti;
+  }
+
+  public LinkedList<Prenotazione> getPrenotazioni() {
+    return prenotazioni;
+  }
+
+  public int getNumeroClienti() {
+    return clienti.size();
+  }
+
+  public int getNumeroVoli() {
+    return voli.size();
+  }
+
+  public int getNumeroPrenotazioni() {
+    return prenotazioni.size();
   }
 }

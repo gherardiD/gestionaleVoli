@@ -66,4 +66,8 @@ public class Cliente implements java.io.Serializable{
   public String getCodice() {
     return codice;
   }
+
+  public String toString() {
+    return cognome + " " + nome + ", " + nazione + ", " + citta_nascita + ", " + data_nascita.get(GregorianCalendar.DAY_OF_MONTH) + "/" + data_nascita.get(GregorianCalendar.MONTH) + "/" + data_nascita.get(GregorianCalendar.YEAR);
+  }
 }
